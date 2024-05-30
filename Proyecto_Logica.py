@@ -85,3 +85,65 @@ def validar_numeros(valor, campo):
             message_text.value = "⚠ No puedes agregar campos vacíos"
             message_text.color = "yellow"  # Color amarillo para mensaje de error
             page.update()  # Actualizar la página para que se muestre el mensaje
+
+def actualizar_lista():
+        employee_list.controls.clear()
+        for emp in data:
+            employee_list.controls.append(
+                ft.Row(
+                    controls=[
+                        ft.Text(emp["id"]),
+                        ft.Text(emp["name"]),
+                        ft.Text(emp["position"]),
+                        ft.Text(emp["salary"]),
+                        ft.Text(emp["nit"]),
+                        ft.IconButton(ft.icons.EDIT, on_click=lambda e, emp=emp: edit_employee(emp)),
+                        ft.IconButton(ft.icons.DELETE, on_click=lambda e, emp=emp: delete_employee(emp))
+                    ]
+                )
+            )
+        page.update()
+
+    def edit_employee(emp):
+        name_field.value = emp["name"]
+        position_field.value = emp["position"]
+        salary_field.value = emp["salary"][1:]  # Eliminar "Q" antes de mostrar el salario
+        nit_field.value = emp["nit"]
+        save_button.visible = True
+        add_button.visible = False
+        page.update()
+        save_button.on_click = lambda e, emp=emp: save_edit(emp)
+
+    def save_edit(emp):
+        emp["name"] = name_field.value
+        emp["position"] = position_field.value
+        emp["salary"] = "Q" + salary_field.value  # Agregar "Q" al salario
+        emp["nit"] = nit_field.value
+        aguardar_datos(data)
+        actualizar_lista()
+        name_field.value = ""
+        position_field.value = ""
+        salary_field.value = ""
+        nit_field.value = ""
+        save_button.visible = False
+        add_button.visible = True
+        page.update()
+
+    def delete_employee(emp):
+        data.remove(emp)
+        aguardar_datos(data)
+        actualizar_lista()
+
+    def show_json(e):
+        json_output.value = json.dumps(data, indent=4)
+        page.update()
+
+    page.title = "Gestión de Personal"
+
+    name_field = ft.TextField(label="Nombre")
+    position_field = ft.TextField(label="Posición")
+    salary_field = ft.TextField(label="Salario")
+    nit_field = ft.TextField(label="NIT")
+
+    nit_error = ft.Text("Ingresa tu número de NIT",color="Green")
+    salary_error = ft.Text("Ingresa el salario en números", color="Green")
