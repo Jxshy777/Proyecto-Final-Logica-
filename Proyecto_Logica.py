@@ -170,3 +170,4 @@ add_button = ft.ElevatedButton(text="Añadir", on_click=agregar_empleado)
     actualizar_lista()
 
 ft.app(target=main)
+.
