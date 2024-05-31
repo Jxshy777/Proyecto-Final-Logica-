@@ -147,3 +147,26 @@ def actualizar_lista():
 
     nit_error = ft.Text("Ingresa tu número de NIT",color="Green")
     salary_error = ft.Text("Ingresa el salario en números", color="Green")
+
+add_button = ft.ElevatedButton(text="Añadir", on_click=agregar_empleado)
+    save_button = ft.ElevatedButton(text="Guardar", visible=False)
+    show_json_button = ft.ElevatedButton(text="Mostrar JSON", on_click=show_json)
+    json_output = ft.TextField(label="Salida JSON", multiline=True, expand=True)
+    message_text = ft.Text("Recuerda que no puedes añadir campos vacíos", color="green")
+
+    employee_list = ft.ListView(expand=1, spacing=10, padding=20)
+
+    page.add(
+        ft.Column([nit_error, nit_field]),
+        name_field,
+        position_field,
+        ft.Column([salary_error, salary_field]),
+        message_text,
+        ft.Row([add_button, save_button, show_json_button]),
+        employee_list,
+        json_output
+    )
+
+    actualizar_lista()
+
+ft.app(target=main)
